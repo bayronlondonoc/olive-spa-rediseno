@@ -1,5 +1,5 @@
 {
-  "version": 3,
+  "version": 4,
   "aviso": {
     "visible": false,
     "texto": ""
@@ -11,6 +11,7 @@
     "texto": "Llevamos el spa hasta la puerta de tu casa: terapeutas certificados, aromas, música y todo lo necesario para que solo te ocupes de disfrutar.",
     "lema": "Paz, sabiduría y renovación — donde el cuerpo, la mente y el alma encuentran armonía.",
     "boton": "Reservar por WhatsApp",
+    "boton_2": "Explorar servicios",
     "foto": {
       "grande": "assets/img/hero-masaje.jpg",
       "alt": "Masaje de relajación en pareja sobre toallas blancas"
@@ -26,6 +27,7 @@
     ]
   },
   "nosotros": {
+    "menu": "Nosotros",
     "etiqueta": "Nuestra esencia",
     "titulo": "El spa viene",
     "destacado": "a ti",
@@ -63,6 +65,7 @@
     "titulo": "Terapias que estimulan",
     "destacado": "los sentidos",
     "intro": "Estimula los sentidos, renueva y purifica el cuerpo con nuestras terapias. Cada masaje dura 1 hora.",
+    "regalo_intro": "🎁 De regalito:",
     "regalo": "todos los masajes llevan masaje facial",
     "boton": "Reservar un masaje",
     "mensaje": "Hola, Olivé Spa 🌿 Quiero reservar un masaje a domicilio.",
@@ -286,6 +289,7 @@
     "titulo": "Renueva e hidrata",
     "destacado": "tu piel",
     "intro": "Tratamientos faciales no invasivos que trabajan rostro, cuello y escote.",
+    "regalo_intro": "🎁 De regalito:",
     "regalo": "todos los faciales llevan masaje en los pies",
     "foto": {
       "grande": "assets/img/facial-mascarilla.jpg",
@@ -548,10 +552,12 @@
     ]
   },
   "reserva": {
+    "menu": "Contacto",
     "etiqueta": "Reserva tu experiencia",
     "titulo": "Tu casa,",
     "destacado": "tu spa.",
     "texto": "Agenda hoy y déjanos llevar el bienestar hasta tu puerta.",
+    "redes": "Síguenos",
     "foto": {
       "grande": "assets/img/ritual-velas.jpg",
       "alt": ""
@@ -561,6 +567,7 @@
     "whatsapp": "573001054987",
     "whatsapp_2": "",
     "mensaje": "Hola, Olivé Spa 🌿 Quiero reservar una experiencia de spa a domicilio.",
+    "boton_menu": "Reservar",
     "email": "olivespamedellin@gmail.com",
     "horarios": [
       {
@@ -589,12 +596,25 @@
   "marca": {
     "nombre": "Olivé Spa",
     "lema": "experiencia a domicilio",
-    "mision": "La experiencia completa de un spa, directamente en la puerta de tu casa."
+    "logo": {
+      "grande": "assets/brand/olive-spa-logo.png",
+      "alt": ""
+    },
+    "mision": "La experiencia completa de un spa, directamente en la puerta de tu casa.",
+    "titulo_contacto": "Contacto",
+    "titulo_horarios": "Horarios",
+    "titulo_cobertura": "Cobertura",
+    "derechos": "Todos los derechos reservados"
   },
   "sitio": {
     "titulo": "Olivé Spa — Spa a domicilio en Medellín · Masajes, faciales y rituales",
     "descripcion": "Olivé Spa: vive la relajación donde te encuentres. Llevamos el spa hasta la puerta de tu casa: masajes, tratamientos faciales, programas spa en pareja y terapias post-quirúrgicas en Medellín (El Poblado, Laureles), Envigado y Sabaneta.",
     "compartir_titulo": "Olivé Spa — Spa a domicilio en Medellín",
-    "compartir_descripcion": "Olivé Spa: vive la relajación donde te encuentres. Masajes, faciales y rituales de bienestar a domicilio en Medellín y el Valle de Aburrá."
+    "compartir_descripcion": "Olivé Spa: vive la relajación donde te encuentres. Masajes, faciales y rituales de bienestar a domicilio en Medellín y el Valle de Aburrá.",
+    "icono": {
+      "grande": "assets/brand/apple-touch-icon.png",
+      "alt": "",
+      "mini": "assets/brand/favicon-32.png"
+    }
   }
 }

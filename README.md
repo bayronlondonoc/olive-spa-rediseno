@@ -52,8 +52,11 @@ El panel también hace commits en `main`: haz `git pull` antes de editar en loca
 - Franja de aviso o promoción arriba de la página.
 - Mostrar u ocultar secciones (masajes, faciales, programas, post-quirúrgico, videos, pasos).
 - Textos de todas las secciones, cifras, pasos, cinta de palabras, fotos de las secciones.
+- Nombres del menú, textos de los botones, títulos del pie de página, logo e ícono de la pestaña (en PNG, para conservar la transparencia).
 - WhatsApp, correo, horarios, redes sociales y zonas de cobertura (se actualizan en todos los lugares de la página).
 - Título y descripción para Google y para cuando se comparte el enlace.
+
+La línea de créditos fotográficos del pie de página aparece sola mientras quede alguna foto de repositorios gratuitos (las que están en `assets/img/` fuera de `panel/`); las fotos que sube la dueña son propias. `node herramientas/auditar-textos.js` lista lo visible que no sale de `contenido.json`.
 
 Al tocar **Guardar y publicar**, el panel muestra un resumen; al confirmar, `api/panel.js` valida todo, sube las fotos nuevas (JPEG liviano: grande máx. 1400 px y miniatura máx. 480 px), genera `index.html` y publica `contenido.json` + `index.html` + fotos en **un solo commit** en `main`. Vercel lo publica solo en 1–2 minutos.
 

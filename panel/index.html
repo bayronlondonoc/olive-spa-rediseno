@@ -203,6 +203,8 @@
       flex-shrink: 0;
     }
     .campo.modificado .miniatura { border: 2px solid var(--accent-2); }
+    .miniatura.completa { object-fit: contain; padding: 8px; }
+    .miniatura.cuadrada { width: 84px; aspect-ratio: 1; }
     .foto-acciones { display: grid; gap: 0.45rem; justify-items: start; }
     .btn-foto { display: inline-block; padding: 0.55rem 1rem; font-size: 0.82rem; cursor: pointer; }
     .medios { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.6rem; align-items: start; }
@@ -498,6 +500,8 @@
             <li><strong>Videos:</strong> súbelo primero a tu Instagram, TikTok, YouTube o Facebook. Luego, en el video, toca <em>Compartir → Copiar enlace</em> y pégalo aquí.</li>
             <li><strong>Ocultar una sección:</strong> apaga «Mostrar esta sección». No se borra nada y puedes volver a mostrarla cuando quieras.</li>
             <li><strong>Promociones:</strong> en «Aviso o promoción» puedes poner una franja arriba de la página y apagarla cuando termine.</li>
+            <li><strong>Menú y botones:</strong> el nombre de cada sección en el menú está en esa misma sección («Nombre en el menú»). El botón «Reservar» de arriba está en «Contacto, horarios y redes».</li>
+            <li><strong>Logo e ícono:</strong> el logo está en «Nombre, logo y pie de página» y el ícono pequeño de la pestaña del navegador en «Google, redes e ícono». Usa una imagen PNG con fondo transparente.</li>
           </ul>
           <p>Si no alcanzas a guardar (por ejemplo, si se cierra el navegador), el panel te ofrece recuperar tus cambios la próxima vez que entres en este mismo celular.</p>
         </div>
@@ -723,39 +727,49 @@
         });
       }
 
-      /* Convierte la foto elegida a JPEG liviano: grande (máx. 1400 px) y pequeña (máx. 480 px). */
-      function prepararFoto(archivo) {
+      /* Convierte la foto elegida a JPEG liviano: grande (máx. 1400 px) y pequeña (máx. 480 px).
+         El logo y el ícono (opciones.formato "png") quedan en PNG para conservar la transparencia;
+         el ícono además queda cuadrado, con la imagen centrada. */
+      function prepararFoto(archivo, opciones) {
+        var o = opciones || {};
+        var png = o.formato === "png";
         return new Promise(function (resolver, rechazar) {
           if (archivo.type && !/^image\//.test(archivo.type)) { rechazar(new Error("Ese archivo no es una foto.")); return; }
           var url = URL.createObjectURL(archivo);
           var img = new Image();
           img.onload = function () {
             var version = function (lado, calidad) {
-              var escala = Math.min(1, lado / Math.max(img.naturalWidth, img.naturalHeight));
+              var escala = o.cuadrado
+                ? lado / Math.max(img.naturalWidth, img.naturalHeight)
+                : Math.min(1, lado / Math.max(img.naturalWidth, img.naturalHeight));
+              var ancho = Math.round(img.naturalWidth * escala);
+              var alto = Math.round(img.naturalHeight * escala);
               var lienzo = document.createElement("canvas");
-              lienzo.width = Math.round(img.naturalWidth * escala);
-              lienzo.height = Math.round(img.naturalHeight * escala);
+              lienzo.width = o.cuadrado ? lado : ancho;
+              lienzo.height = o.cuadrado ? lado : alto;
               var g = lienzo.getContext("2d");
               g.imageSmoothingQuality = "high";
-              g.drawImage(img, 0, 0, lienzo.width, lienzo.height);
+              g.drawImage(img, (lienzo.width - ancho) / 2, (lienzo.height - alto) / 2, ancho, alto);
+              if (png) return lienzo.toDataURL("image/png");
               var datosUrl = lienzo.toDataURL("image/jpeg", calidad);
               if (datosUrl.length > 1400000) datosUrl = lienzo.toDataURL("image/jpeg", 0.7);
               return datosUrl;
             };
-            var grande = version(FOTO_LADO_MAX, 0.82);
-            var mini = version(MINI_LADO_MAX, 0.78);
+            var grande = version(o.lado || FOTO_LADO_MAX, 0.82);
+            var ladoMini = o.ladoMini !== undefined ? o.ladoMini : png ? 0 : MINI_LADO_MAX;
+            var mini = ladoMini ? version(ladoMini, 0.78) : null;
             URL.revokeObjectURL(url);
-            resolver({ url: grande, datos: grande.split(",")[1], mini: mini.split(",")[1] });
+            resolver({ url: grande, datos: grande.split(",")[1], mini: mini ? mini.split(",")[1] : null });
           };
           img.onerror = function () { URL.revokeObjectURL(url); rechazar(new Error("No se pudo leer esa foto. Prueba con otra (JPG o PNG).")); };
           img.src = url;
         });
       }
-      function agregarFotos(lista, maximo, alListo, nota) {
+      function agregarFotos(lista, maximo, alListo, nota, opciones) {
         var archivos = Array.prototype.slice.call(lista || []).slice(0, maximo);
         if (!archivos.length) return;
         nota.textContent = archivos.length > 1 ? "Preparando las fotos…" : "Preparando la foto…";
-        Promise.all(archivos.map(prepararFoto)).then(function (listas) {
+        Promise.all(archivos.map(function (a) { return prepararFoto(a, opciones); })).then(function (listas) {
           nota.textContent = "";
           alListo(listas.map(function (f) {
             var clave = "f" + Date.now().toString(36) + "-" + ++contador;
@@ -935,15 +949,17 @@
       }
 
       function campoFoto(def, obj, k, seccion, original) {
+        var png = def.formato === "png"; // logo o ícono: se ven completos, sobre su color de fondo
         var caja = crear("div", "campo");
         caja.appendChild(crear("p", "campo-etiqueta", def.etiqueta));
         var fila = crear("div", "foto-campo");
-        var img = crear("img", "miniatura");
+        var img = crear("img", "miniatura" + (png ? " completa" : "") + (def.cuadrado ? " cuadrada" : ""));
         img.alt = "";
         img.loading = "lazy";
-        img.src = srcFoto(obj[k], true);
+        if (png) img.style.backgroundColor = def.fondo || "#fff";
+        img.src = srcFoto(obj[k], !png);
         var acciones = crear("div", "foto-acciones");
-        var cambiar = crear("label", "btn btn-sec btn-foto", "Cambiar foto");
+        var cambiar = crear("label", "btn btn-sec btn-foto", png ? "Cambiar imagen" : "Cambiar foto");
         var entrada = crear("input");
         entrada.type = "file";
         entrada.accept = "image/*";
@@ -952,15 +968,15 @@
         var nota = crear("p", "campo-nota");
         var deshacer = boton("Deshacer", function () {
           obj[k] = copia(original());
-          img.src = srcFoto(obj[k], true);
+          img.src = srcFoto(obj[k], !png);
           cambio();
         }, "link");
         entrada.addEventListener("change", function () {
           agregarFotos(entrada.files, 1, function (claves) {
-            obj[k] = { nueva: claves[0], alt: ALT_GENERAL };
-            img.src = srcFoto(obj[k], true);
+            obj[k] = { nueva: claves[0], alt: png ? "" : ALT_GENERAL };
+            img.src = srcFoto(obj[k], !png);
             cambio();
-          }, nota);
+          }, nota, def);
           entrada.value = "";
         });
         acciones.appendChild(cambiar);

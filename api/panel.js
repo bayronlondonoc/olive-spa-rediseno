@@ -212,16 +212,19 @@ function validarArchivos(archivos) {
   const claves = Object.keys(archivos);
   if (claves.length > FOTOS_POR_GUARDADO) throw conEstado(400, "Son muchas fotos a la vez. Guarda máximo " + FOTOS_POR_GUARDADO + ".");
   const limpios = Object.create(null);
-  const jpeg = (base64, maximo) => {
+  // Fotos en JPEG; el logo y el ícono llegan en PNG para conservar el fondo transparente.
+  const imagen = (base64, maximo) => {
     const bytes = Buffer.from(String(base64 || ""), "base64");
-    if (bytes.length < 4 || bytes[0] !== 0xff || bytes[1] !== 0xd8 || bytes[2] !== 0xff) throw conEstado(400, "Una de las fotos no es una imagen válida.");
+    const esJpeg = bytes.length > 3 && bytes[0] === 0xff && bytes[1] === 0xd8 && bytes[2] === 0xff;
+    const esPng = bytes.length > 8 && bytes.subarray(0, 8).equals(Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]));
+    if (!esJpeg && !esPng) throw conEstado(400, "Una de las fotos no es una imagen válida.");
     if (bytes.length > maximo) throw conEstado(400, "Una de las fotos es demasiado pesada.");
-    return bytes.toString("base64");
+    return { base64: bytes.toString("base64"), extension: esPng ? ".png" : ".jpg" };
   };
   for (const clave of claves) {
     if (!/^[a-z0-9-]{1,40}$/.test(clave)) throw conEstado(400, "Datos inválidos.");
     const a = archivos[clave] || {};
-    limpios[clave] = { datos: jpeg(a.datos, FOTO_MAX_BYTES), mini: a.mini ? jpeg(a.mini, MINI_MAX_BYTES) : null };
+    limpios[clave] = { datos: imagen(a.datos, FOTO_MAX_BYTES), mini: a.mini ? imagen(a.mini, MINI_MAX_BYTES) : null };
   }
   return limpios;
 }
@@ -287,9 +290,10 @@ async function publicar(cfg, cuerpo) {
       arbolFotos.push({ path: ruta, mode: "100644", type: "blob", sha: blob.sha });
       return ruta;
     };
+    const { datos, mini } = archivos[clave];
     rutas[clave] = {
-      grande: await subir(base + ".jpg", archivos[clave].datos),
-      mini: archivos[clave].mini ? await subir(base + "-mini.jpg", archivos[clave].mini) : null
+      grande: await subir(base + datos.extension, datos.base64),
+      mini: mini ? await subir(base + "-mini" + mini.extension, mini.base64) : null
     };
   }
   limpio = ponerRutas(limpio, rutas);

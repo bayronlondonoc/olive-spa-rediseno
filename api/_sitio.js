@@ -27,12 +27,14 @@ const ESQUEMA = [
     { k: "texto", tipo: "parrafo", etiqueta: "Texto", max: 400 },
     { k: "lema", tipo: "parrafo", etiqueta: "Frase en cursiva", max: 200 },
     { k: "boton", tipo: "texto", etiqueta: "Texto del botón de WhatsApp", max: 40, obligatorio: true },
+    { k: "boton_2", tipo: "texto", etiqueta: "Texto del segundo botón (lleva a los servicios)", max: 30, obligatorio: true },
     { k: "foto", tipo: "foto", etiqueta: "Foto principal" }
   ] },
   { clave: "cinta", titulo: "Cinta de palabras (debajo de la portada)", campos: [
     { k: "frases", tipo: "lista", etiqueta: "Frases que se mueven", max: 40, maxItems: 8, minItems: 1 }
   ] },
   { clave: "nosotros", titulo: "Nuestra esencia", campos: [
+    { k: "menu", tipo: "texto", etiqueta: "Nombre en el menú", max: 24, obligatorio: true },
     { k: "etiqueta", tipo: "texto", etiqueta: "Frase pequeña de arriba", max: 60 },
     { k: "titulo", tipo: "texto", etiqueta: "Título", max: 60, obligatorio: true },
     { k: "destacado", tipo: "texto", etiqueta: "Parte en cursiva del título", max: 60 },
@@ -48,7 +50,8 @@ const ESQUEMA = [
     { k: "titulo", tipo: "texto", etiqueta: "Título", max: 60, obligatorio: true },
     { k: "destacado", tipo: "texto", etiqueta: "Parte en cursiva del título", max: 60 },
     { k: "intro", tipo: "parrafo", etiqueta: "Texto de introducción", max: 400 },
-    { k: "regalo", tipo: "texto", etiqueta: "Regalito (vacío = no se muestra)", max: 120 },
+    { k: "regalo_intro", tipo: "texto", etiqueta: "Frase antes del regalito", max: 40 },
+    { k: "regalo", tipo: "texto", etiqueta: "Regalito, en negrilla (vacío = no se muestra)", max: 120 },
     { k: "boton", tipo: "texto", etiqueta: "Botón de reserva", max: 40, obligatorio: true },
     { k: "mensaje", tipo: "texto", etiqueta: "Mensaje de WhatsApp de ese botón", max: 160 },
     { k: "servicios", tipo: "servicios", etiqueta: "Masajes", campos: ["nombre", "etiqueta", "precio", "descripcion", "medios"] }
@@ -60,7 +63,8 @@ const ESQUEMA = [
     { k: "titulo", tipo: "texto", etiqueta: "Título", max: 60, obligatorio: true },
     { k: "destacado", tipo: "texto", etiqueta: "Parte en cursiva del título", max: 60 },
     { k: "intro", tipo: "parrafo", etiqueta: "Texto de introducción", max: 400 },
-    { k: "regalo", tipo: "texto", etiqueta: "Regalito (vacío = no se muestra)", max: 120 },
+    { k: "regalo_intro", tipo: "texto", etiqueta: "Frase antes del regalito", max: 40 },
+    { k: "regalo", tipo: "texto", etiqueta: "Regalito, en negrilla (vacío = no se muestra)", max: 120 },
     { k: "foto", tipo: "foto", etiqueta: "Foto grande de la sección" },
     { k: "servicios", tipo: "servicios", etiqueta: "Tratamientos", campos: ["nombre", "precio", "descripcion", "detalle", "medios"] }
   ] },
@@ -99,16 +103,19 @@ const ESQUEMA = [
     { k: "lista", tipo: "pasos", etiqueta: "Pasos" }
   ] },
   { clave: "reserva", titulo: "Cierre: «Reserva tu experiencia»", campos: [
+    { k: "menu", tipo: "texto", etiqueta: "Nombre en el menú", max: 24, obligatorio: true },
     { k: "etiqueta", tipo: "texto", etiqueta: "Frase pequeña de arriba", max: 60 },
     { k: "titulo", tipo: "texto", etiqueta: "Título", max: 60, obligatorio: true },
     { k: "destacado", tipo: "texto", etiqueta: "Parte en cursiva del título", max: 60 },
     { k: "texto", tipo: "parrafo", etiqueta: "Texto", max: 300 },
+    { k: "redes", tipo: "texto", etiqueta: "Texto encima de las redes sociales (vacío = no se muestra)", max: 40 },
     { k: "foto", tipo: "foto", etiqueta: "Foto de fondo" }
   ] },
   { clave: "contacto", titulo: "Contacto, horarios y redes", ayuda: "Se actualizan en todos los lugares de la página donde aparecen.", campos: [
     { k: "whatsapp", tipo: "telefono", etiqueta: "WhatsApp principal", obligatorio: true },
     { k: "whatsapp_2", tipo: "telefono", etiqueta: "Segundo WhatsApp (opcional)" },
     { k: "mensaje", tipo: "texto", etiqueta: "Mensaje que llega por WhatsApp", max: 160 },
+    { k: "boton_menu", tipo: "texto", etiqueta: "Botón de reservar del menú de arriba", max: 24, obligatorio: true },
     { k: "email", tipo: "email", etiqueta: "Correo" },
     { k: "horarios", tipo: "horarios", etiqueta: "Horarios" },
     { k: "instagram", tipo: "url", etiqueta: "Instagram (enlace)" },
@@ -116,16 +123,22 @@ const ESQUEMA = [
     { k: "tiktok", tipo: "url", etiqueta: "TikTok (enlace)" },
     { k: "cobertura", tipo: "lista", etiqueta: "Zonas de cobertura (pie de página)", max: 40, maxItems: 12 }
   ] },
-  { clave: "marca", titulo: "Nombre y pie de página", campos: [
+  { clave: "marca", titulo: "Nombre, logo y pie de página", campos: [
     { k: "nombre", tipo: "texto", etiqueta: "Nombre del spa", max: 40, obligatorio: true },
     { k: "lema", tipo: "texto", etiqueta: "Frase corta junto al nombre", max: 40 },
-    { k: "mision", tipo: "parrafo", etiqueta: "Frase del pie de página", max: 200 }
+    { k: "logo", tipo: "foto", etiqueta: "Logo (pie de página)", formato: "png", lado: 512, fondo: "#262b1f" },
+    { k: "mision", tipo: "parrafo", etiqueta: "Frase del pie de página", max: 200 },
+    { k: "titulo_contacto", tipo: "texto", etiqueta: "Título «Contacto» del pie de página", max: 30, obligatorio: true },
+    { k: "titulo_horarios", tipo: "texto", etiqueta: "Título «Horarios» del pie de página", max: 30, obligatorio: true },
+    { k: "titulo_cobertura", tipo: "texto", etiqueta: "Título «Cobertura» del pie de página", max: 30, obligatorio: true },
+    { k: "derechos", tipo: "texto", etiqueta: "Texto junto al año, abajo del todo", max: 80 }
   ] },
-  { clave: "sitio", titulo: "Google y redes sociales", ayuda: "Cómo aparece la página en Google y cuando se comparte por WhatsApp o redes.", campos: [
+  { clave: "sitio", titulo: "Google, redes e ícono", ayuda: "Cómo aparece la página en Google, cuando se comparte por WhatsApp o redes, y el ícono pequeño de la pestaña del navegador.", campos: [
     { k: "titulo", tipo: "texto", etiqueta: "Título en Google", max: 90, obligatorio: true },
     { k: "descripcion", tipo: "parrafo", etiqueta: "Descripción en Google", max: 300 },
     { k: "compartir_titulo", tipo: "texto", etiqueta: "Título al compartir", max: 90 },
-    { k: "compartir_descripcion", tipo: "parrafo", etiqueta: "Descripción al compartir", max: 300 }
+    { k: "compartir_descripcion", tipo: "parrafo", etiqueta: "Descripción al compartir", max: 300 },
+    { k: "icono", tipo: "foto", etiqueta: "Ícono de la pestaña del navegador (cuadrado)", formato: "png", cuadrado: true, lado: 180, ladoMini: 32 }
   ] }
 ];
 
@@ -394,6 +407,9 @@ function usuarioRed(red, url) {
 }
 const iconoRed = (red, tamano) => '<svg viewBox="0 0 24 24" width="' + tamano + '" height="' + tamano + '" aria-hidden="true">' + ICONOS_REDES[red] + "</svg>";
 
+// Las fotos de repositorios gratuitos están en assets/img/ (fuera de panel/) y llevan crédito en creditos.html.
+const conFotosDeRepositorio = (c) => [...rutasDeFotos(c)].some((r) => r.startsWith("assets/img/") && !r.startsWith("assets/img/panel/"));
+
 // Un enlace por red: la principal con su @usuario, las demás solo con el ícono.
 function enlacesRedes(c, sangria) {
   return REDES.filter((red) => c.contacto[red]).map((red, i) => {
@@ -426,7 +442,7 @@ function cabecera(s, sangria) {
   if (s.etiqueta) lineas.push('<p class="kicker reveal">' + esc(s.etiqueta) + "</p>");
   lineas.push('<h2 class="section-title reveal">' + titulo(s.titulo, s.destacado) + "</h2>");
   if (s.intro) lineas.push('<p class="section-sub reveal">' + parrafo(s.intro) + "</p>");
-  if (s.regalo) lineas.push('<p class="gift reveal">🎁 De regalito: <strong>' + esc(s.regalo) + "</strong></p>");
+  if (s.regalo) lineas.push('<p class="gift reveal">' + (s.regalo_intro ? esc(s.regalo_intro) + " " : "") + "<strong>" + esc(s.regalo) + "</strong></p>");
   return lineas.map((l) => sangria + l).join("\n");
 }
 
@@ -457,9 +473,8 @@ function renderizar(c) {
     '  <meta property="og:url" content="' + SITIO_URL + '" />',
     '  <meta property="og:image" content="' + SITIO_URL + esc(portada.grande) + '" />',
     '  <meta property="og:locale" content="es_CO" />',
-    '  <link rel="icon" type="image/png" sizes="32x32" href="assets/brand/favicon-32.png" />',
-    '  <link rel="icon" type="image/png" sizes="16x16" href="assets/brand/favicon-16.png" />',
-    '  <link rel="apple-touch-icon" sizes="180x180" href="assets/brand/apple-touch-icon.png" />',
+    '  <link rel="icon" type="image/png" sizes="32x32" href="' + esc(c.sitio.icono.mini || c.sitio.icono.grande) + '" />',
+    '  <link rel="apple-touch-icon" sizes="180x180" href="' + esc(c.sitio.icono.grande) + '" />',
     "",
     '  <link rel="preconnect" href="https://fonts.googleapis.com" />',
     '  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />',
@@ -482,17 +497,17 @@ function renderizar(c) {
     '        <span class="nav-brand-tag">' + esc(c.marca.lema) + "</span>",
     "      </a>",
     '      <nav class="nav-links" data-nav-links aria-label="Navegación principal">',
-    '        <a href="#nosotros">Nosotros</a>'
+    '        <a href="#nosotros">' + esc(c.nosotros.menu) + "</a>"
   );
   for (const k of visibles) L.push('        <a href="#' + k + '">' + esc(c[k].menu) + "</a>");
   if (hayVideos) L.push('        <a href="#videos">' + esc(c.videos.menu) + "</a>");
-  L.push('        <a href="#contacto">Contacto</a>', "      </nav>");
+  L.push('        <a href="#contacto">' + esc(c.reserva.menu) + "</a>", "      </nav>");
   const principal = REDES.find((red) => ct[red]);
   if (principal) {
     L.push('      <a class="nav-red" href="' + esc(ct[principal]) + '" target="_blank" rel="noopener" aria-label="' + NOMBRE_RED[principal] + " de " + esc(c.marca.nombre) + '">' + iconoRed(principal, 20) + "</a>");
   }
   L.push(
-    '      <a class="btn btn-primary nav-cta" href="' + esc(reservar) + '" target="_blank" rel="noopener">Reservar</a>',
+    '      <a class="btn btn-primary nav-cta" href="' + esc(reservar) + '" target="_blank" rel="noopener">' + esc(ct.boton_menu) + "</a>",
     '      <button class="nav-burger" data-burger aria-label="Abrir menú" aria-expanded="false">',
     "        <span></span><span></span><span></span>",
     "      </button>",
@@ -517,7 +532,7 @@ function renderizar(c) {
     '              <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">' + ICONO_WHATSAPP + "</svg>",
     "              " + esc(c.portada.boton),
     "            </a>",
-    '            <a class="btn btn-ghost" href="#' + (visibles[0] || "contacto") + '">Explorar servicios</a>',
+    '            <a class="btn btn-ghost" href="#' + (visibles[0] || "contacto") + '">' + esc(c.portada.boton_2) + "</a>",
     "          </div>"
   );
   if (ct.horarios.length) {
@@ -765,7 +780,11 @@ function renderizar(c) {
   L.push("        </div>");
   if (ct.horarios.length) L.push('        <p class="cta-schedule reveal">' + ct.horarios.map((h) => esc(horarioCorto(h))).join(" &nbsp;·&nbsp; ") + "</p>");
   const redes = enlacesRedes(c, "          ");
-  if (redes.length) L.push('        <div class="cta-redes reveal">', '          <p class="cta-redes-titulo">Síguenos</p>', ...redes, "        </div>");
+  if (redes.length) {
+    L.push('        <div class="cta-redes reveal">');
+    if (r.redes) L.push('          <p class="cta-redes-titulo">' + esc(r.redes) + "</p>");
+    L.push(...redes, "        </div>");
+  }
   L.push("      </div>", "    </section>", "  </main>");
 
   // Pie de página
@@ -775,7 +794,7 @@ function renderizar(c) {
     '  <footer class="footer">',
     '    <div class="container footer-grid">',
     '      <div class="footer-brand">',
-    '        <img class="footer-logo-mark" src="assets/brand/olive-spa-logo.png" alt="" aria-hidden="true" loading="lazy" decoding="async" />',
+    '        <img class="footer-logo-mark" src="' + esc(c.marca.logo.grande) + '" alt="" aria-hidden="true" loading="lazy" decoding="async" />',
     '        <p class="footer-logo">' + esc(c.marca.nombre) + "</p>",
     '        <p class="footer-tag">' + esc(c.marca.lema.charAt(0).toUpperCase() + c.marca.lema.slice(1)) + "</p>"
   );
@@ -784,7 +803,7 @@ function renderizar(c) {
   L.push(
     "      </div>",
     '      <div class="footer-col">',
-    "        <h4>Contacto</h4>",
+    "        <h4>" + esc(c.marca.titulo_contacto) + "</h4>",
     "        <ul>",
     '          <li><a href="https://wa.me/' + ct.whatsapp + '" target="_blank" rel="noopener">+57 ' + telefonoVisible(ct.whatsapp) + "</a></li>"
   );
@@ -792,20 +811,21 @@ function renderizar(c) {
   if (ct.email) L.push('          <li><a href="mailto:' + esc(ct.email) + '">' + esc(ct.email) + "</a></li>");
   L.push("        </ul>", "      </div>");
   if (ct.horarios.length) {
-    L.push('      <div class="footer-col">', "        <h4>Horarios</h4>", "        <ul>");
+    L.push('      <div class="footer-col">', "        <h4>" + esc(c.marca.titulo_horarios) + "</h4>", "        <ul>");
     for (const h of ct.horarios) L.push("          <li>" + esc(h.dias) + "<br />" + esc(h.horas) + "</li>");
     L.push("        </ul>", "      </div>");
   }
   if (ct.cobertura.length) {
-    L.push('      <div class="footer-col">', "        <h4>Cobertura</h4>", "        <ul>");
+    L.push('      <div class="footer-col">', "        <h4>" + esc(c.marca.titulo_cobertura) + "</h4>", "        <ul>");
     for (const zona of ct.cobertura) L.push("          <li>" + esc(zona) + "</li>");
     L.push("        </ul>", "      </div>");
   }
   L.push(
     "    </div>",
     '    <div class="container footer-bottom">',
-    "      <p>© <span data-year>2026</span> " + esc(c.marca.nombre) + " · Todos los derechos reservados</p>",
-    '      <p class="footer-credits">Fotografías de repositorios gratuitos bajo licencias Creative Commons. <a href="creditos.html">Créditos fotográficos →</a></p>',
+    "      <p>© <span data-year>2026</span> " + esc(c.marca.nombre) + (c.marca.derechos ? " · " + esc(c.marca.derechos) : "") + "</p>",
+    // Los créditos solo hacen falta mientras quede alguna foto de repositorios gratuitos (las subidas desde el panel son propias).
+    ...(conFotosDeRepositorio(c) ? ['      <p class="footer-credits">Fotografías de repositorios gratuitos bajo licencias Creative Commons. <a href="creditos.html">Créditos fotográficos →</a></p>'] : []),
     "    </div>",
     "  </footer>",
     "",
