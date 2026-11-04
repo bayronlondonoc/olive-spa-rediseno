@@ -1,5 +1,5 @@
 {
-  "version": 5,
+  "version": 6,
   "aviso": {
     "visible": false,
     "texto": ""
@@ -581,11 +581,11 @@
       }
     ],
     "instagram": "https://www.instagram.com/olivespamedellin/",
-    "instagram_arriba": true,
+    "instagram_arriba": false,
     "facebook": "https://www.facebook.com/share/18Qb4jLNsf/",
     "facebook_arriba": false,
     "tiktok": "https://www.tiktok.com/@olivespamedellin",
-    "tiktok_arriba": true,
+    "tiktok_arriba": false,
     "cobertura": [
       "Medellín",
       "El Poblado",

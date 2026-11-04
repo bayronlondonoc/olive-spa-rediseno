@@ -465,7 +465,8 @@ function renderizar(c) {
     '<html lang="es" class="no-js">',
     "<head>",
     '  <meta charset="utf-8" />',
-    '  <script>document.documentElement.classList.remove("no-js");</script>',
+    // Antes de pintar: «movimiento» activa las animaciones; «quieto» si el teléfono pide reducir el movimiento.
+    '  <script>document.documentElement.className = matchMedia("(prefers-reduced-motion: reduce)").matches ? "quieto" : "movimiento";</script>',
     '  <meta name="viewport" content="width=device-width, initial-scale=1" />',
     "  <title>" + esc(c.sitio.titulo) + "</title>",
     '  <meta name="description" content="' + esc(c.sitio.descripcion) + '" />',
@@ -862,6 +863,6 @@ function renderizar(c) {
 }
 
 // Versión de styles.css y main.js (cambiarla cuando cambien esos archivos, para que los navegadores los recarguen).
-const VERSION_ARCHIVOS = "2026110401";
+const VERSION_ARCHIVOS = "2026110402";
 
 module.exports = { ESQUEMA, CAMPOS_SERVICIO, SECCIONES_SERVICIOS, MAX_FOTOS_SERVICIO, MAX_SERVICIOS, MAX_VIDEOS, validar, renderizar, rutasDeFotos, analizarVideo, slug };

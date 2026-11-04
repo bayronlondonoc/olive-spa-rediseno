@@ -16,7 +16,7 @@ contenido.json    ← TODO el contenido de la página (textos, precios, servicio
 index.html        ← landing principal, GENERADA a partir de contenido.json (no editar a mano)
 creditos.html     ← créditos fotográficos (licencias Creative Commons)
 styles.css        ← estilos
-main.js           ← interacciones (nav, reveals, contadores, galerías y visor de fotos/videos)
+main.js           ← interacciones y movimiento (ver «Animaciones»), galerías y visor de fotos/videos
 lib/              ← GSAP + ScrollTrigger
 assets/img/       ← fotografías (repositorios gratuitos, ver créditos)
 assets/img/servicios/ ← foto inicial de cada servicio (repositorios gratuitos, ver créditos)
@@ -40,6 +40,20 @@ Todo lo que se ve en la página vive en `contenido.json`, y `index.html` se gene
 - **Agregar un campo editable**: decláralo en `ESQUEMA` (o en `CAMPOS_SERVICIO`) de `api/_sitio.js`, agrégalo a `contenido.json` y úsalo en `renderizar`. El panel arma sus formularios a partir del esquema, no hay que tocarlo.
 
 El panel también hace commits en `main`: haz `git pull` antes de editar en local.
+
+## Animaciones
+
+La página tiene movimiento sutil, pensado primero para el celular (`main.js` + `styles.css`, con GSAP y ScrollTrigger en `lib/`):
+
+- Los bloques aparecen al bajar; los que llegan juntos entran uno tras otro.
+- Los títulos suben palabra por palabra y las fotos grandes se destapan de abajo hacia arriba.
+- Fotos y adornos se mueven a otra velocidad que la página (profundidad).
+- La cinta de palabras se acelera al bajar y cambia de sentido al subir.
+- En «Cómo funciona», una línea une los pasos y se dibuja al bajar.
+- Una barra fina arriba muestra cuánto falta; la barra del menú se esconde al bajar y vuelve al subir.
+- Con mouse: botones con imán y un brillo que sigue al puntero en las tarjetas.
+
+Si el teléfono tiene activado «reducir movimiento», la página se muestra quieta (el `<head>` pone la clase `quieto` en vez de `movimiento`). Sin JavaScript, todo se ve igual, sin animaciones.
 
 ## Panel de administración
 
