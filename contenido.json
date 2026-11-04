@@ -1,11 +1,11 @@
 {
-  "version": 4,
+  "version": 5,
   "aviso": {
     "visible": false,
     "texto": ""
   },
   "portada": {
-    "etiqueta": "Spa a domicilio · Medellín y el Valle de Aburrá",
+    "etiqueta": "Spa en Medellín y el Valle de Aburrá",
     "titulo": "Vive la relajación,",
     "destacado": "donde te encuentres.",
     "texto": "Llevamos el spa hasta la puerta de tu casa: terapeutas certificados, aromas, música y todo lo necesario para que solo te ocupes de disfrutar.",
@@ -22,8 +22,7 @@
       "Masajes de relajación",
       "Tratamientos faciales",
       "Programas spa en pareja",
-      "Post-quirúrgico",
-      "A domicilio"
+      "Post-quirúrgico"
     ]
   },
   "nosotros": {
@@ -68,7 +67,7 @@
     "regalo_intro": "🎁 De regalito:",
     "regalo": "todos los masajes llevan masaje facial",
     "boton": "Reservar un masaje",
-    "mensaje": "Hola, Olivé Spa 🌿 Quiero reservar un masaje a domicilio.",
+    "mensaje": "Hola, Olivé Spa 🌿 Quiero reservar un masaje.",
     "servicios": [
       {
         "id": "masaje-relajacion-profunda",
@@ -582,8 +581,11 @@
       }
     ],
     "instagram": "https://www.instagram.com/olivespamedellin/",
+    "instagram_arriba": true,
     "facebook": "https://www.facebook.com/share/18Qb4jLNsf/",
+    "facebook_arriba": false,
     "tiktok": "https://www.tiktok.com/@olivespamedellin",
+    "tiktok_arriba": true,
     "cobertura": [
       "Medellín",
       "El Poblado",
@@ -595,7 +597,7 @@
   },
   "marca": {
     "nombre": "Olivé Spa",
-    "lema": "experiencia a domicilio",
+    "lema": "",
     "logo": {
       "grande": "assets/brand/olive-spa-logo.png",
       "alt": ""

@@ -233,10 +233,14 @@ ul, ol { list-style: none; padding: 0; }
 }
 .nav-links a:hover::after { transform: scaleX(1); transform-origin: left; }
 .nav-cta { display: none; margin-left: 0.4rem; padding: 0.65rem 1.4rem; }
-/* Ícono de la red principal (Instagram), junto al botón de reservar o al menú del celular */
-.nav-red {
+/* Íconos de redes (Instagram, TikTok…), junto al botón de reservar o al menú del celular */
+.nav-redes {
   margin-left: auto;
   flex-shrink: 0;
+  display: flex;
+  align-items: center;
+}
+.nav-red {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -247,7 +251,7 @@ ul, ol { list-style: none; padding: 0; }
   transition: color 0.3s var(--ease-out), background 0.3s var(--ease-out);
 }
 .nav-red:hover { color: var(--accent); background: rgba(111, 107, 63, 0.1); }
-.nav-red ~ .nav-burger { margin-left: -1.4rem; }
+.nav-redes ~ .nav-burger { margin-left: -1.4rem; }
 .nav-burger {
   margin-left: auto;
   display: inline-flex;
@@ -266,7 +270,7 @@ ul, ol { list-style: none; padding: 0; }
 
 @media (min-width: 960px) {
   .nav-links { display: flex; }
-  .nav-red { margin-left: -0.9rem; }
+  .nav-redes { margin-left: -0.9rem; }
   .nav-cta { display: inline-flex; }
   .nav-burger { display: none; }
 }
@@ -274,7 +278,7 @@ ul, ol { list-style: none; padding: 0; }
 @media (min-width: 960px) and (max-width: 1199px) {
   .nav-inner { gap: 1.1rem; }
   .nav-links { gap: 1.15rem; }
-  .nav-red { margin-left: -0.4rem; }
+  .nav-redes { margin-left: -0.4rem; }
 }
 @media (max-width: 959px) {
   .nav.is-open { background: var(--bg); box-shadow: 0 1px 0 var(--line); }

@@ -119,13 +119,16 @@ const ESQUEMA = [
     { k: "email", tipo: "email", etiqueta: "Correo" },
     { k: "horarios", tipo: "horarios", etiqueta: "Horarios" },
     { k: "instagram", tipo: "url", etiqueta: "Instagram (enlace)" },
+    { k: "instagram_arriba", tipo: "interruptor", etiqueta: "Mostrar el ícono de Instagram arriba, junto al menú" },
     { k: "facebook", tipo: "url", etiqueta: "Facebook (enlace)" },
+    { k: "facebook_arriba", tipo: "interruptor", etiqueta: "Mostrar el ícono de Facebook arriba, junto al menú" },
     { k: "tiktok", tipo: "url", etiqueta: "TikTok (enlace)" },
+    { k: "tiktok_arriba", tipo: "interruptor", etiqueta: "Mostrar el ícono de TikTok arriba, junto al menú" },
     { k: "cobertura", tipo: "lista", etiqueta: "Zonas de cobertura (pie de página)", max: 40, maxItems: 12 }
   ] },
   { clave: "marca", titulo: "Nombre, logo y pie de página", campos: [
     { k: "nombre", tipo: "texto", etiqueta: "Nombre del spa", max: 40, obligatorio: true },
-    { k: "lema", tipo: "texto", etiqueta: "Frase corta junto al nombre", max: 40 },
+    { k: "lema", tipo: "texto", etiqueta: "Frase corta debajo del nombre (vacío = no se muestra)", max: 40 },
     { k: "logo", tipo: "foto", etiqueta: "Logo (pie de página)", formato: "png", lado: 512, fondo: "#262b1f" },
     { k: "mision", tipo: "parrafo", etiqueta: "Frase del pie de página", max: 200 },
     { k: "titulo_contacto", tipo: "texto", etiqueta: "Título «Contacto» del pie de página", max: 30, obligatorio: true },
@@ -494,7 +497,7 @@ function renderizar(c) {
     '    <div class="nav-inner">',
     '      <a class="nav-brand" href="#inicio">',
     '        <span class="nav-brand-name">' + esc(c.marca.nombre) + "</span>",
-    '        <span class="nav-brand-tag">' + esc(c.marca.lema) + "</span>",
+    ...(c.marca.lema ? ['        <span class="nav-brand-tag">' + esc(c.marca.lema) + "</span>"] : []),
     "      </a>",
     '      <nav class="nav-links" data-nav-links aria-label="Navegación principal">',
     '        <a href="#nosotros">' + esc(c.nosotros.menu) + "</a>"
@@ -502,9 +505,14 @@ function renderizar(c) {
   for (const k of visibles) L.push('        <a href="#' + k + '">' + esc(c[k].menu) + "</a>");
   if (hayVideos) L.push('        <a href="#videos">' + esc(c.videos.menu) + "</a>");
   L.push('        <a href="#contacto">' + esc(c.reserva.menu) + "</a>", "      </nav>");
-  const principal = REDES.find((red) => ct[red]);
-  if (principal) {
-    L.push('      <a class="nav-red" href="' + esc(ct[principal]) + '" target="_blank" rel="noopener" aria-label="' + NOMBRE_RED[principal] + " de " + esc(c.marca.nombre) + '">' + iconoRed(principal, 20) + "</a>");
+  // Íconos de las redes que se eligieron para la barra de arriba
+  const arriba = REDES.filter((red) => ct[red] && ct[red + "_arriba"]);
+  if (arriba.length) {
+    L.push('      <div class="nav-redes">');
+    for (const red of arriba) {
+      L.push('        <a class="nav-red" href="' + esc(ct[red]) + '" target="_blank" rel="noopener" aria-label="' + NOMBRE_RED[red] + " de " + esc(c.marca.nombre) + '">' + iconoRed(red, 20) + "</a>");
+    }
+    L.push("      </div>");
   }
   L.push(
     '      <a class="btn btn-primary nav-cta" href="' + esc(reservar) + '" target="_blank" rel="noopener">' + esc(ct.boton_menu) + "</a>",
@@ -552,11 +560,20 @@ function renderizar(c) {
     "    </section>",
     "",
     "    <!-- ============================ MARQUEE ============================ -->",
-    '    <div class="marquee" aria-hidden="true">',
-    '      <div class="marquee-track">'
+    '    <div class="marquee" aria-hidden="true">'
   );
-  const cinta = c.cinta.frases.map((f) => "<span>" + esc(f) + "</span><i>✿</i>").join("");
-  L.push("        " + cinta, "        " + cinta, "      </div>", "    </div>");
+  // Cada mitad de la cinta repite las frases hasta tener al menos 10 (si son pocas, en pantallas anchas quedaría un hueco).
+  // La duración crece con la cantidad para que se mueva siempre a la misma velocidad (6 s por frase).
+  const vueltas = Math.ceil(10 / c.cinta.frases.length);
+  const frase = c.cinta.frases.map((f) => "<span>" + esc(f) + "</span><i>✿</i>").join("");
+  const cinta = frase.repeat(vueltas);
+  L.push(
+    '      <div class="marquee-track" style="animation-duration: ' + 6 * c.cinta.frases.length * vueltas + 's">',
+    "        " + cinta,
+    "        " + cinta,
+    "      </div>",
+    "    </div>"
+  );
 
   // Nosotros
   const n = c.nosotros;
@@ -795,9 +812,9 @@ function renderizar(c) {
     '    <div class="container footer-grid">',
     '      <div class="footer-brand">',
     '        <img class="footer-logo-mark" src="' + esc(c.marca.logo.grande) + '" alt="" aria-hidden="true" loading="lazy" decoding="async" />',
-    '        <p class="footer-logo">' + esc(c.marca.nombre) + "</p>",
-    '        <p class="footer-tag">' + esc(c.marca.lema.charAt(0).toUpperCase() + c.marca.lema.slice(1)) + "</p>"
+    '        <p class="footer-logo">' + esc(c.marca.nombre) + "</p>"
   );
+  if (c.marca.lema) L.push('        <p class="footer-tag">' + esc(c.marca.lema.charAt(0).toUpperCase() + c.marca.lema.slice(1)) + "</p>");
   if (c.marca.mision) L.push('        <p class="footer-mission">' + parrafo(c.marca.mision) + "</p>");
   if (redes.length) L.push('        <div class="footer-social">', ...redes, "        </div>");
   L.push(
@@ -845,6 +862,6 @@ function renderizar(c) {
 }
 
 // Versión de styles.css y main.js (cambiarla cuando cambien esos archivos, para que los navegadores los recarguen).
-const VERSION_ARCHIVOS = "2026102801";
+const VERSION_ARCHIVOS = "2026110401";
 
 module.exports = { ESQUEMA, CAMPOS_SERVICIO, SECCIONES_SERVICIOS, MAX_FOTOS_SERVICIO, MAX_SERVICIOS, MAX_VIDEOS, validar, renderizar, rutasDeFotos, analizarVideo, slug };
