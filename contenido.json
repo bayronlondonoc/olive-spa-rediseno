@@ -1,13 +1,13 @@
 {
-  "version": 10,
+  "version": 11,
   "aviso": {
     "visible": false,
     "texto": ""
   },
   "portada": {
     "etiqueta": "Spa de lujo en Medellín",
-    "titulo": "Vive la relajación,",
-    "destacado": "en El Poblado.",
+    "titulo": "Vive la relajación.",
+    "destacado": "",
     "texto": "Spa en un ambiente de lujo, diseñado para tu relajación, bienestar y recuperación. Un refugio de calma y conexión.",
     "boton": "Reservar por WhatsApp",
     "boton_2": "Explorar servicios",
@@ -691,7 +691,7 @@
     "lista": [
       {
         "pregunta": "¿Dónde están ubicados?",
-        "respuesta": "Te esperamos en nuestras instalaciones en el Hotel Dann Carlton Belfort, en El Poblado (Medellín)."
+        "respuesta": "Te esperamos en nuestras instalaciones en el Hotel Dann Carlton Belfort, en Medellín."
       },
       {
         "pregunta": "¿Cómo reservo?",
@@ -746,7 +746,7 @@
       }
     ],
     "ubicacion": "Hotel Dann Carlton Belfort",
-    "direccion": "El Poblado, Medellín",
+    "direccion": "Medellín, Colombia",
     "mapa": "",
     "instagram": "https://www.instagram.com/olivespamedellin/",
     "facebook": "https://www.facebook.com/share/18Qb4jLNsf/",
@@ -783,9 +783,9 @@
     "como_llegar": "Cómo llegar"
   },
   "sitio": {
-    "titulo": "Olivé Spa — Spa de lujo en El Poblado, Medellín · Masajes, faciales y cuidado capilar",
-    "descripcion": "Olivé Spa: un refugio de calma y conexión en el Hotel Dann Carlton Belfort, en El Poblado (Medellín). Masajes de relajación, tratamientos faciales, cuidado capilar y programas spa en pareja.",
-    "compartir_titulo": "Olivé Spa — Spa de lujo en El Poblado, Medellín",
+    "titulo": "Olivé Spa — Spa de lujo en Medellín · Masajes, faciales y cuidado capilar",
+    "descripcion": "Olivé Spa: un refugio de calma y conexión en el Hotel Dann Carlton Belfort, en Medellín. Masajes de relajación, tratamientos faciales, cuidado capilar y programas spa en pareja.",
+    "compartir_titulo": "Olivé Spa — Spa de lujo en Medellín",
     "compartir_descripcion": "Spa en un ambiente de lujo, diseñado para tu relajación, bienestar y recuperación. Masajes, faciales, cuidado capilar y rituales en pareja.",
     "icono": {
       "grande": "assets/brand/apple-touch-icon.png",
