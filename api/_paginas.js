@@ -10,7 +10,7 @@ const {
 } = require("./_util");
 
 // Versión de styles.css y main.js (cambiarla cuando cambien esos archivos, para que los navegadores los recarguen).
-const VERSION_ARCHIVOS = "2026110701";
+const VERSION_ARCHIVOS = "2026110702";
 
 // Cómo se presenta cada sección de servicios en el inicio.
 const BLOQUE_INICIO = { masajes: "carrusel", faciales: "dividido", capilar: "lista", programas: "galeria", postquirurgico: "dividido-inverso" };
@@ -184,9 +184,14 @@ function entradasMenu(ctx) {
 }
 const actualAttr = (ctx, clave) => (ctx.actual === clave ? ' aria-current="page"' : "");
 
+// Arriba va el logo (si hay); si no, el nombre del spa en letras.
 function marcaHtml(ctx) {
   const { c } = ctx;
-  return '<a class="marca" href="' + ctx.pagina("inicio") + '"' + (ctx.actual === "inicio" ? ' aria-current="page"' : "") + '><span class="marca-nombre">' + esc(c.marca.nombre) + "</span>" +
+  const abrir = '<a class="marca' + (c.marca.logo_cabecera ? " marca-con-logo" : "") + '" href="' + ctx.pagina("inicio") + '"' + (ctx.actual === "inicio" ? ' aria-current="page"' : "") + ">";
+  if (c.marca.logo_cabecera) {
+    return abrir + '<img class="marca-logo" src="' + esc(ctx.ruta(c.marca.logo_cabecera.grande)) + '" alt="' + esc(c.marca.nombre) + '" width="285" height="300" decoding="async" /></a>';
+  }
+  return abrir + '<span class="marca-nombre">' + esc(c.marca.nombre) + "</span>" +
     (c.marca.lema ? '<span class="marca-lema">' + esc(c.marca.lema) + "</span>" : "") + "</a>";
 }
 

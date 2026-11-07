@@ -44,7 +44,10 @@
   --ease-suave: cubic-bezier(0.65, 0, 0.35, 1);
   --gutter: clamp(20px, 5vw, 64px);
   --ancho: 1320px;
-  --cabecera-h: 76px;
+  --cabecera-h: 116px;
+  --cabecera-h-solida: 76px;
+  --logo-h: 98px;
+  --logo-h-solida: 60px;
   --aviso-h: 0px;
   --seccion: clamp(88px, 11vw, 160px);
 }
@@ -340,6 +343,19 @@ em { font-style: italic; }
   white-space: nowrap;
 }
 .marca-lema { margin-top: 0.45em; font-size: 0.6rem; font-weight: 400; letter-spacing: 0.3em; text-transform: uppercase; opacity: 0.72; }
+/* Logo arriba: grande sobre la portada, un poco más pequeño al bajar */
+.marca-logo {
+  display: block;
+  width: auto;
+  height: var(--logo-h, 70px);
+  transition: height 0.5s var(--ease), filter 0.5s var(--ease);
+}
+.cabecera-barra { transition: height 0.5s var(--ease); }
+.cabecera.solida .cabecera-barra { height: var(--cabecera-h-solida, 72px); }
+.cabecera.solida .marca-logo { height: var(--logo-h-solida, 54px); }
+/* Sobre la foto de la portada el dorado se aclara y lleva sombra, para que se lea */
+.con-portada-oscura .cabecera:not(.solida) .marca-logo { filter: brightness(1.45) saturate(1.1) drop-shadow(0 2px 14px rgba(10, 14, 11, 0.7)); }
+.menu-movil .marca-logo { height: var(--logo-h-solida, 54px); filter: brightness(1.3); }
 .cabecera-menu { display: none; }
 .cabecera-menu a {
   position: relative;
@@ -396,6 +412,9 @@ em { font-style: italic; }
 .cabecera-abrir-lineas span:last-child { bottom: 0; transform-origin: 100% 50%; transform: scaleX(0.62); }
 .cabecera-abrir:hover .cabecera-abrir-lineas span:last-child { transform: scaleX(1); }
 
+@media (max-width: 899px) {
+  :root { --cabecera-h: 92px; --cabecera-h-solida: 68px; --logo-h: 78px; --logo-h-solida: 54px; }
+}
 @media (max-width: 599px) {
   .boton-cabecera { display: none; }
   .marca-nombre { font-size: 1.32rem; }

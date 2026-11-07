@@ -128,7 +128,8 @@ const ESQUEMA = [
   { clave: "marca", titulo: "Nombre, logo y pie de página", campos: [
     { k: "nombre", tipo: "texto", etiqueta: "Nombre del spa", max: 40, obligatorio: true },
     { k: "lema", tipo: "texto", etiqueta: "Frase corta debajo del nombre (vacío = no se muestra)", max: 40 },
-    { k: "logo", tipo: "foto", etiqueta: "Logo (pie de página)", formato: "png", lado: 512, fondo: "#efe7d9" },
+    { k: "logo_cabecera", tipo: "foto", etiqueta: "Logo de arriba, junto al menú (vacío = se muestra el nombre en letras)", formato: "png", lado: 360, fondo: "#2d3a30", opcional: true },
+    { k: "logo", tipo: "foto", etiqueta: "Logo completo (pie de página)", formato: "png", lado: 512, fondo: "#efe7d9" },
     { k: "mision", tipo: "parrafo", etiqueta: "Frase del pie de página", max: 200 },
     { k: "titulo_paginas", tipo: "texto", etiqueta: "Título de la lista de páginas", max: 30, obligatorio: true },
     { k: "titulo_contacto", tipo: "texto", etiqueta: "Título «Contacto»", max: 30, obligatorio: true },
