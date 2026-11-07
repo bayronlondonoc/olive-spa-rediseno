@@ -1,5 +1,5 @@
 {
-  "version": 7,
+  "version": 8,
   "aviso": {
     "visible": false,
     "texto": ""
@@ -389,8 +389,8 @@
     "boton": "Reservar un tratamiento capilar",
     "mensaje": "Hola, Olivé Spa 🌿 Quiero reservar un tratamiento capilar.",
     "foto": {
-      "grande": "assets/img/capilar.jpg",
-      "alt": "Mujer secando su cabello"
+      "grande": "assets/img/panel/capilar-blower-20261107-drive.jpg",
+      "alt": "Cabello rubio con ondas suaves después del blower"
     },
     "servicios": [
       {
@@ -402,9 +402,9 @@
         "medios": [
           {
             "tipo": "foto",
-            "grande": "assets/img/servicios/capilar-blower.jpg",
-            "alt": "Estilista secando el cabello de una clienta",
-            "mini": "assets/img/servicios/capilar-blower-mini.jpg"
+            "grande": "assets/img/panel/capilar-blower-20261107-drive.jpg",
+            "alt": "Cabello rubio con ondas suaves después del blower",
+            "mini": "assets/img/panel/capilar-blower-20261107-drive-mini.jpg"
           }
         ]
       },
@@ -417,9 +417,9 @@
         "medios": [
           {
             "tipo": "foto",
-            "grande": "assets/img/servicios/capilar-alisado-brillo-espejo.jpg",
-            "alt": "Mechones de cabello liso y brillante",
-            "mini": "assets/img/servicios/capilar-alisado-brillo-espejo-mini.jpg"
+            "grande": "assets/img/panel/capilar-alisado-brillo-espejo-20261107-drive.jpg",
+            "alt": "Cabello liso y brillante después del alisado",
+            "mini": "assets/img/panel/capilar-alisado-brillo-espejo-20261107-drive-mini.jpg"
           }
         ]
       },
@@ -432,9 +432,9 @@
         "medios": [
           {
             "tipo": "foto",
-            "grande": "assets/img/servicios/capilar-anti-caida.jpg",
-            "alt": "Mujer con las manos en el cabello",
-            "mini": "assets/img/servicios/capilar-anti-caida-mini.jpg"
+            "grande": "assets/img/panel/capilar-anti-caida-20261107-drive.jpg",
+            "alt": "Clienta sonriendo durante el lavado y masaje del cuero cabelludo",
+            "mini": "assets/img/panel/capilar-anti-caida-20261107-drive-mini.jpg"
           }
         ]
       },
@@ -447,9 +447,9 @@
         "medios": [
           {
             "tipo": "foto",
-            "grande": "assets/img/servicios/capilar-recuperacion.jpg",
-            "alt": "Cabello ondulado sano y brillante",
-            "mini": "assets/img/servicios/capilar-recuperacion-mini.jpg"
+            "grande": "assets/img/panel/capilar-recuperacion-20261107-drive.jpg",
+            "alt": "Tratamiento con alta frecuencia sobre el cabello",
+            "mini": "assets/img/panel/capilar-recuperacion-20261107-drive-mini.jpg"
           }
         ]
       },
@@ -462,9 +462,9 @@
         "medios": [
           {
             "tipo": "foto",
-            "grande": "assets/img/servicios/capilar-diagnostico.jpg",
-            "alt": "Textura del cabello vista de cerca",
-            "mini": "assets/img/servicios/capilar-diagnostico-mini.jpg"
+            "grande": "assets/img/panel/capilar-diagnostico-20261107-drive.jpg",
+            "alt": "Diagnóstico del cuero cabelludo con capilógrafo y pantalla",
+            "mini": "assets/img/panel/capilar-diagnostico-20261107-drive-mini.jpg"
           }
         ]
       }
