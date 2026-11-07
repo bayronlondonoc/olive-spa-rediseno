@@ -1,0 +1,5 @@
+User-agent: *
+Disallow: /tarifas
+Disallow: /api/
+
+Sitemap: https://olivespamedellin.com/sitemap.xml

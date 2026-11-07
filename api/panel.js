@@ -1,8 +1,8 @@
 // Panel de administración de Olivé Spa (función de Vercel).
 //
 // Todo el contenido editable vive en contenido.json. Al guardar desde /tarifas, esta función
-// valida el contenido, sube las fotos nuevas, genera index.html (api/_sitio.js) y publica
-// contenido.json + index.html + fotos en un solo commit en `main`. Vercel publica ese commit solo.
+// valida el contenido, sube las fotos nuevas, genera todas las páginas (api/_paginas.js) y publica
+// contenido.json + páginas + fotos en un solo commit en la rama del sitio. Vercel publica ese commit solo.
 //
 // Acciones:
 //   POST ?accion=entrar   { usuario, clave }                         → cookie de sesión
@@ -21,7 +21,8 @@ const crypto = require("crypto");
 const sitio = require("./_sitio");
 
 const REPO = "spabienestar/brochure";
-const RAMA = "main";
+// La rama de la que salió esta publicación (en el sitio real, main; en una vista previa, la rama de prueba).
+const RAMA = process.env.VERCEL_GIT_COMMIT_REF || "main";
 const CARPETA_FOTOS = "assets/img/panel/";
 const COOKIE = "olive_panel";
 const DURACION_SESION = 8 * 60 * 60; // segundos
@@ -155,7 +156,9 @@ function resumirCambios(antes, despues) {
         for (const s of d.servicios) {
           const v = viejos.get(s.id);
           if (!v) { lineas.push(seccion.titulo + ": servicio nuevo «" + s.nombre + "»"); continue; }
-          if (v.precio !== s.precio && s.precio !== undefined) lineas.push(seccion.titulo + ": precio de «" + s.nombre + "» " + formatoPrecio(v.precio) + " → " + formatoPrecio(s.precio));
+          if ((v.precio || null) !== (s.precio || null)) {
+            lineas.push(seccion.titulo + ": precio de «" + s.nombre + "» " + (v.precio ? formatoPrecio(v.precio) : "sin precio") + " → " + (s.precio ? formatoPrecio(s.precio) : "sin precio"));
+          }
           const otros = [];
           for (const k of Object.keys(sitio.CAMPOS_SERVICIO)) {
             if (k === "precio" || !(k in s)) continue;
@@ -301,7 +304,8 @@ async function publicar(cfg, cuerpo) {
   const lineas = resumirCambios(actual, limpio);
   if (!lineas.length) return { cambios: 0, version: actual.version, contenido: actual, fotos: {} };
   limpio.version = actual.version + 1;
-  const html = sitio.renderizar(limpio);
+  // Todas las páginas del sitio (inicio, nosotros, una por sección, contacto y sitemap.xml).
+  const paginas = Object.entries(sitio.renderizar(limpio)).map(([ruta, texto]) => ({ path: ruta, mode: "100644", type: "blob", content: texto }));
 
   for (let intento = 1; ; intento++) {
     const commitActual = await github(cfg, "GET", "/git/commits/" + cabeza);
@@ -309,7 +313,7 @@ async function publicar(cfg, cuerpo) {
       base_tree: commitActual.tree.sha,
       tree: [
         { path: "contenido.json", mode: "100644", type: "blob", content: JSON.stringify(limpio, null, 2) + "\n" },
-        { path: "index.html", mode: "100644", type: "blob", content: html },
+        ...paginas,
         ...arbolFotos
       ]
     });

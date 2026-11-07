@@ -205,6 +205,9 @@
     .campo.modificado .miniatura { border: 2px solid var(--accent-2); }
     .miniatura.completa { object-fit: contain; padding: 8px; }
     .miniatura.cuadrada { width: 84px; aspect-ratio: 1; }
+    .miniatura[hidden] { display: none; }
+    .miniatura-vacia { display: grid; place-items: center; background: #fff; border-style: dashed; color: var(--ink-mute); font-size: 0.78rem; }
+    .link.peligro { color: var(--error); }
     .foto-acciones { display: grid; gap: 0.45rem; justify-items: start; }
     .btn-foto { display: inline-block; padding: 0.55rem 1rem; font-size: 0.82rem; cursor: pointer; }
     .medios { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.6rem; align-items: start; }
@@ -488,19 +491,22 @@
         <summary>¿Cómo se usa el panel?</summary>
         <div class="ayuda-cuerpo">
           <ol>
-            <li>Las secciones están en el mismo orden en que aparecen en la página. Toca una para abrirla.</li>
+            <li>Las secciones están en el orden del inicio de la página. Masajes, Faciales, Cuidado capilar y Programas tienen además su propia página. Toca una sección para abrirla.</li>
             <li>Lo que cambies se marca en dorado. Si te equivocas, toca <strong>Deshacer</strong>.</li>
             <li>Cuando termines, toca <strong>Guardar y publicar</strong>. Antes de publicar te mostramos un resumen.</li>
             <li>En 1 o 2 minutos los cambios aparecen solos en la página.</li>
           </ol>
           <ul>
-            <li><strong>Precios:</strong> escribe solo los números, sin puntos ni signos.</li>
+            <li><strong>Precios:</strong> son opcionales. Si el precio queda vacío, el servicio se muestra sin valor (así están ahora). Si lo escribes, usa solo números, sin puntos ni signos.</li>
+            <li><strong>Preguntas frecuentes:</strong> en «Preguntas frecuentes» puedes agregar, cambiar, ordenar o quitar preguntas y sus respuestas.</li>
+            <li><strong>Ubicación:</strong> el lugar, la dirección y el enlace de Google Maps están en «Contacto, horarios y ubicación». El mapa de la página de contacto busca ese lugar.</li>
             <li><strong>Servicios:</strong> toca «Editar» para cambiar el nombre, la descripción y las fotos, subirlo o bajarlo en la lista, o eliminarlo. Para crear uno, usa «+ Agregar servicio» al final de cada sección.</li>
             <li><strong>Fotos:</strong> cada servicio puede tener hasta 3 fotos o videos. El primero es el que se ve en la página; los demás aparecen al tocarlo.</li>
             <li><strong>Videos:</strong> súbelo primero a tu Instagram, TikTok, YouTube o Facebook. Luego, en el video, toca <em>Compartir → Copiar enlace</em> y pégalo aquí.</li>
             <li><strong>Ocultar una sección:</strong> apaga «Mostrar esta sección». No se borra nada y puedes volver a mostrarla cuando quieras.</li>
             <li><strong>Promociones:</strong> en «Aviso o promoción» puedes poner una franja arriba de la página y apagarla cuando termine.</li>
-            <li><strong>Menú y botones:</strong> el nombre de cada sección en el menú está en esa misma sección («Nombre en el menú»). El botón «Reservar» de arriba está en «Contacto, horarios y redes».</li>
+            <li><strong>Menú y botones:</strong> el nombre de cada sección en el menú está en esa misma sección («Nombre en el menú»). El botón «Reservar» de arriba está en «Contacto, horarios y ubicación». Los textos cortos que se repiten (Reservar, Ver, Menú, Cerrar…) están en «Botones y textos pequeños».</li>
+            <li><strong>Fotos de cada página:</strong> la foto grande de arriba de cada página (y de su tarjeta en el inicio) está en esa misma sección, en «Títulos, textos y foto de la sección». La portada del inicio puede tener hasta 3 fotos que se turnan.</li>
             <li><strong>Logo e ícono:</strong> el logo está en «Nombre, logo y pie de página» y el ícono pequeño de la pestaña del navegador en «Google, redes e ícono». Usa una imagen PNG con fondo transparente.</li>
           </ul>
           <p>Si no alcanzas a guardar (por ejemplo, si se cierra el navegador), el panel te ofrece recuperar tus cambios la próxima vez que entres en este mismo celular.</p>
@@ -542,12 +548,14 @@
       var MAX_MEDIOS = 3;
       var MAX_VIDEOS = 12;
       var MAX_SERVICIOS = 40;
-      var ALT_GENERAL = "Olivé Spa, spa a domicilio en Medellín";
+      var ALT_GENERAL = "Olivé Spa, spa en Medellín";
+      var MAX_PREGUNTAS = 12;
+      var MAX_CIFRAS = 3;
       var BORRADOR = "olive-panel-borrador";
       var PLATAFORMAS = { youtube: "YouTube", instagram: "Instagram", tiktok: "TikTok", facebook: "Facebook", vimeo: "Vimeo" };
       // Enlaces cortos: el servidor los convierte al enlace completo al guardar.
       var CORTO = /^https?:\/\/((vm|vt)\.tiktok\.com\/|(www\.|m\.)?tiktok\.com\/t\/|fb\.watch\/|(www\.|m\.)?facebook\.com\/share\/[vr]\/)/i;
-      var LISTAS = ["lista", "horarios", "cifras", "pasos", "videos", "servicios"];
+      var LISTAS = ["lista", "horarios", "cifras", "pasos", "preguntas", "videos", "servicios"];
 
       var $ = function (sel, scope) { return (scope || document).querySelector(sel); };
       var $$ = function (sel, scope) { return Array.prototype.slice.call((scope || document).querySelectorAll(sel)); };
@@ -608,7 +616,7 @@
         return t.replace(/\s+/g, " ").trim();
       }
       /* La cajita del precio crece con el número para que el $ quede pegado. */
-      function ajustar(input) { input.style.width = Math.max(input.value.length, 5) + 0.6 + "ch"; }
+      function ajustar(input) { input.style.width = Math.max(input.value.length || (input.placeholder || "").length, 5) + 0.6 + "ch"; }
       /* Las casillas de texto largo crecen con el texto para que se lea completo. */
       function crecer(area) {
         if (!area || area.tagName !== "TEXTAREA" || !area.offsetParent) return;
@@ -848,6 +856,7 @@
           case "horarios": return campoHorarios(def, obj, k, seccion, original);
           case "cifras": return campoCifras(def, obj, k, seccion, original);
           case "pasos": return campoPasos(def, obj, k, seccion, original);
+          case "preguntas": return campoPreguntas(def, obj, k, seccion, original);
           case "videos": return campoVideos(def, obj, k, seccion, original);
           case "servicios": return campoServicios(def, obj, k, seccion);
           default: return campoTexto(def, obj, k, seccion, original, grupo);
@@ -957,7 +966,8 @@
         img.alt = "";
         img.loading = "lazy";
         if (png) img.style.backgroundColor = def.fondo || "#fff";
-        img.src = srcFoto(obj[k], !png);
+        // Las fotos opcionales pueden quedar vacías: se muestra un recuadro en su lugar.
+        var vacio = crear("span", "miniatura miniatura-vacia", "Sin foto");
         var acciones = crear("div", "foto-acciones");
         var cambiar = crear("label", "btn btn-sec btn-foto", png ? "Cambiar imagen" : "Cambiar foto");
         var entrada = crear("input");
@@ -966,25 +976,41 @@
         entrada.hidden = true;
         cambiar.appendChild(entrada);
         var nota = crear("p", "campo-nota");
+        var pintarFoto = function () {
+          var hay = !!obj[k];
+          img.hidden = !hay;
+          vacio.hidden = hay;
+          if (hay) img.src = srcFoto(obj[k], !png);
+          cambiar.firstChild.nodeValue = hay ? (png ? "Cambiar imagen" : "Cambiar foto") : "Agregar foto";
+          if (quitar) quitar.hidden = !hay;
+        };
         var deshacer = boton("Deshacer", function () {
           obj[k] = copia(original());
-          img.src = srcFoto(obj[k], !png);
+          pintarFoto();
           cambio();
         }, "link");
+        var quitar = def.opcional ? boton("Quitar foto", function () {
+          obj[k] = null;
+          pintarFoto();
+          cambio();
+        }, "link peligro") : null;
         entrada.addEventListener("change", function () {
           agregarFotos(entrada.files, 1, function (claves) {
             obj[k] = { nueva: claves[0], alt: png ? "" : ALT_GENERAL };
-            img.src = srcFoto(obj[k], !png);
+            pintarFoto();
             cambio();
           }, nota, def);
           entrada.value = "";
         });
         acciones.appendChild(cambiar);
+        if (quitar) acciones.appendChild(quitar);
         acciones.appendChild(deshacer);
         fila.appendChild(img);
+        fila.appendChild(vacio);
         fila.appendChild(acciones);
         caja.appendChild(fila);
         caja.appendChild(nota);
+        pintarFoto();
         registrar({
           seccion: seccion,
           caja: caja,
@@ -1121,9 +1147,21 @@
             else { cifra.numero = totalServicios(); num.value = String(cifra.numero); }
             cambio();
           }));
+          var acciones = crear("div", "bloque-acciones");
+          if (i > 0) acciones.appendChild(boton("↑ Subir", function () { mover(lista, i, -1); repintar(seccion); cambio(); }));
+          acciones.appendChild(boton("Quitar esta cifra", function () { lista.splice(i, 1); repintar(seccion); cambio(); }, "mini-btn peligro"));
+          bloque.appendChild(acciones);
           caja.appendChild(bloque);
           ganchos.push({ seccion: seccion, fn: function () { num.placeholder = cifra.auto ? String(totalServicios()) : ""; } });
         });
+        if (!lista.length) caja.appendChild(crear("p", "vacio", "Sin cifras: no se muestran."));
+        if (lista.length < MAX_CIFRAS) {
+          caja.appendChild(boton("+ Agregar cifra", function () {
+            lista.push({ numero: 0, texto: "", mas: false, auto: false });
+            repintar(seccion);
+            cambio();
+          }, "mini-btn agregar"));
+        }
         var normal = function (l) {
           return (l || []).map(function (c) { return { numero: c.auto ? 0 : Number(c.numero), texto: limpio(c.texto), mas: c.mas === true, auto: c.auto === true }; });
         };
@@ -1163,6 +1201,36 @@
         return finLista(caja, seccion,
           function () { return !igual(normal(lista), normal(original())); },
           function () { return lista.some(function (p) { return !limpio(p.titulo); }) ? "Cada paso necesita un título" : ""; });
+      }
+
+      function campoPreguntas(def, obj, k, seccion, original) {
+        var lista = obj[k];
+        var caja = bloqueLista(def, seccion);
+        if (!lista.length) caja.appendChild(crear("p", "vacio", "Todavía no hay preguntas."));
+        lista.forEach(function (p, i) {
+          var bloque = crear("div", "bloque");
+          bloque.appendChild(crear("p", "bloque-num", "Pregunta " + (i + 1)));
+          bloque.appendChild(miniCampo("Pregunta", p, "pregunta", 140, seccion + ":" + k + ":" + i, "¿Dónde están ubicados?"));
+          bloque.appendChild(miniCampo("Respuesta", p, "respuesta", 700, null, null, true));
+          var acciones = crear("div", "bloque-acciones");
+          if (i > 0) acciones.appendChild(boton("↑ Subir", function () { mover(lista, i, -1); repintar(seccion); cambio(); }));
+          if (i < lista.length - 1) acciones.appendChild(boton("↓ Bajar", function () { mover(lista, i, 1); repintar(seccion); cambio(); }));
+          acciones.appendChild(boton("Quitar", function () { lista.splice(i, 1); repintar(seccion); cambio(); }, "mini-btn peligro"));
+          bloque.appendChild(acciones);
+          caja.appendChild(bloque);
+        });
+        if (lista.length < MAX_PREGUNTAS) {
+          caja.appendChild(boton("+ Agregar pregunta", function () {
+            lista.push({ pregunta: "", respuesta: "" });
+            enfocar = seccion + ":" + k + ":" + (lista.length - 1);
+            repintar(seccion);
+            cambio();
+          }, "mini-btn agregar"));
+        }
+        var normal = function (l) { return (l || []).map(function (p) { return { pregunta: limpio(p.pregunta), respuesta: limpio(p.respuesta, true) }; }); };
+        return finLista(caja, seccion,
+          function () { return !igual(normal(lista), normal(original())); },
+          function () { return lista.some(function (p) { return !limpio(p.pregunta) || !limpio(p.respuesta, true); }) ? "Cada pregunta necesita su respuesta" : ""; });
       }
 
       function formVideo(alAgregar, textoBoton, alCancelar) {
@@ -1423,16 +1491,18 @@
         input.setAttribute("aria-label", "Precio");
         input.setAttribute("data-enfocar", grupo + ":precio");
         input.value = s.precio ? formatear(s.precio) : "";
-        input.placeholder = "0";
+        // El precio es opcional: vacío, el servicio se muestra sin valor.
+        input.placeholder = "opcional";
+        input.title = "Precio (opcional). Vacío = no se muestra en la página.";
         ajustar(input);
         caja.appendChild(input);
-        var antes = anterior ? anterior.precio : null;
+        var antes = anterior && anterior.precio ? anterior.precio : null;
         var c = registrar({
           seccion: seccion,
           grupo: grupo,
           caja: caja,
           cambiado: function () { return (s.precio || null) !== antes; },
-          error: function () { return s.precio >= 1000 && s.precio <= 50000000 ? "" : "Escribe el precio (solo números)"; },
+          error: function () { return !s.precio || (s.precio >= 1000 && s.precio <= 50000000) ? "" : "Revisa el precio (solo números, desde 1.000)"; },
           alPintar: function (cambiado, error) {
             var partes = [];
             if (error) partes.push(error);
@@ -1482,10 +1552,11 @@
         if (sec.ayuda) cuerpo.appendChild(crear("p", "sec-ayuda", sec.ayuda));
 
         // En las secciones con lista (servicios o videos), la lista va primero y los textos en un desplegable.
-        var conLista = sec.campos.some(function (d) { return d.tipo === "servicios" || d.tipo === "videos"; });
+        var principal = function (d) { return d.tipo === "servicios" || d.tipo === "videos" || d.tipo === "preguntas"; };
+        var conLista = sec.campos.some(principal);
         var secundarios = [];
         sec.campos.forEach(function (def) {
-          if (conLista && def.tipo !== "interruptor" && def.tipo !== "servicios" && def.tipo !== "videos") { secundarios.push(def); return; }
+          if (conLista && def.tipo !== "interruptor" && !principal(def)) { secundarios.push(def); return; }
           cuerpo.appendChild(campo(def, obj, def.k, clave, original(def.k)));
         });
         if (secundarios.length) {
@@ -1535,6 +1606,7 @@
           else if (e.cambios) pastilla("Sin guardar", "cambios");
           if (obj.servicios) info.textContent = obj.servicios.length === 1 ? "1 servicio" : obj.servicios.length + " servicios";
           else if (clave === "videos" && obj.lista.length) info.textContent = obj.lista.length === 1 ? "1 video" : obj.lista.length + " videos";
+          else if (clave === "preguntas") info.textContent = obj.lista.length === 1 ? "1 pregunta" : obj.lista.length + " preguntas";
           deshacer.hidden = !e.cambios;
           if (vistaAviso) {
             vistaAviso.textContent = limpio(obj.texto) || "Escribe el texto del aviso";
@@ -1592,7 +1664,8 @@
           var s = c[sec.clave];
           if (!s || typeof s !== "object") return;
           sec.campos.forEach(function (def) {
-            if (def.tipo === "foto" && (!s[def.k] || s[def.k].nueva)) s[def.k] = copia(base[sec.clave][def.k]);
+            // Una foto nueva sin subir no se puede recuperar; una foto opcional quitada sí queda quitada.
+            if (def.tipo === "foto" && ((s[def.k] && s[def.k].nueva) || (!s[def.k] && !def.opcional))) s[def.k] = copia(base[sec.clave][def.k]);
             if (LISTAS.indexOf(def.tipo) >= 0 && !Array.isArray(s[def.k])) s[def.k] = copia(base[sec.clave][def.k]);
             if (def.tipo === "servicios") {
               s[def.k] = s[def.k].filter(function (srv) { return srv && typeof srv === "object"; });
