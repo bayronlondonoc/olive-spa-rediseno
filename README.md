@@ -97,6 +97,8 @@ Al tocar **Guardar y publicar**, el panel muestra un resumen; al confirmar, `api
 - Si se agrega una foto de un repositorio gratuito, su crédito va en `creditos.html` y `assets/credits.json`.
 - Una sección oculta deja en su carpeta una página que lleva al inicio, para que los enlaces ya compartidos sigan funcionando.
 
+**Panel de demostración:** `node herramientas/panel-demo.js` genera `panel-demo/index.html`, el mismo panel sin contraseña, que simula el servidor en el navegador con el contenido real y no publica nada. No se sube al sitio real (`panel-demo/` está excluido); se publica solo en la copia pública de GitHub Pages (`bayronlondonoc/olive-spa-rediseno`, rama `demo` del repositorio local) para mostrar cómo funciona el panel: https://bayronlondonoc.github.io/olive-spa-rediseno/panel-demo/
+
 Variables de entorno en Vercel (Settings → Environment Variables, entorno Production):
 
 | Variable | Contenido |

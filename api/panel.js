@@ -401,3 +401,5 @@ module.exports = async function panel(req, res) {
     return responder(error.estado || 500, { error: mensaje });
   }
 };
+// Lo usa herramientas/panel-demo.js para que el panel de demostración muestre el mismo resumen de cambios.
+module.exports.resumirCambios = resumirCambios;
